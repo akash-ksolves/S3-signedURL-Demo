@@ -14,9 +14,9 @@ const uploadObject = (req, res) => {
     const { id } = req.params;
     const { objectKey } = req.body;
     const objectParams = {
-      Key: `${id}/${objectKey}`, // path to upload
+      Key: `${id}-${objectKey}`, // path to upload
       Bucket: bucket, // pass your bucket name
-      Expires: 60 * 5, // 5 minutes
+      Expires: 60 * 60 * 48, // 5 minutes // 48hours
       // Body: data,
     };
     s3.getSignedUrl("putObject", objectParams, (error, data) => {
@@ -32,14 +32,41 @@ const uploadObject = (req, res) => {
   }
 };
 
+const getObject = (req, res) => {
+  try {
+    const { id } = req.params;
+    const { objectKey } = req.body;
+    const objectParams = {
+      Key: `1684240005050-afterAdding100Records.png`, // path to upload
+      Bucket: bucket, // pass your bucket name
+      // Expires: 60 * 5, // 5 minutes
+      // Body: data,
+    };
+    s3.getObject(objectParams, (error, data) => {
+      if (error) {
+        return res
+          .status(500)
+          .json({ status: "error", message: error.message });
+      }
+      // res.writeHead(200, { "Content-Type": "image/jpeg" });
+      // res.write(data.Body, "binary");
+      // res.end(null, "binary");
+      return res.end(data.Body, "binary");
+      // return res.status(200).json({ status: "ok", data });
+    });
+  } catch (error) {
+    return res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
 const getPresignedURL = (req, res) => {
   try {
     const { id } = req.params;
     const { objectKey } = req.body;
     const objectParams = {
-      Key: `${id}/${objectKey}`, // path to upload
+      Key: `${id}-${objectKey}`, // path to upload
       Bucket: bucket, // pass your bucket name
-      Expires: 60 * 5, // 5 minutes
+      Expires: 60 * 60 * 48, // 5 minutes // 48hours
       // Body: data,
     };
     s3.getSignedUrl("getObject", objectParams, (error, data) => {
@@ -55,4 +82,4 @@ const getPresignedURL = (req, res) => {
   }
 };
 
-module.exports = { uploadObject, getPresignedURL };
+module.exports = { uploadObject, getPresignedURL, getObject };
