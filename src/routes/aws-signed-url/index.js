@@ -62,7 +62,7 @@ const getObject = (req, res) => {
 const getPresignedURL = (req, res) => {
   try {
     const { id } = req.params;
-    const { objectKey } = req.body;
+    const { objectKey } = req.query;
     const objectParams = {
       Key: `${id}-${objectKey}`, // path to upload
       Bucket: bucket, // pass your bucket name
