@@ -21,11 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes
 
-app.use("/s3-signed-url", routes);
-
-app.get("/", (req, res) => {
-  res.send("Helllo from server");
-});
+app.use("/", routes);
 
 // Start HTTPS server
 https

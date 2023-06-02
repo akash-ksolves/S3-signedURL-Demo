@@ -16,7 +16,7 @@ const uploadObject = (req, res) => {
     const objectParams = {
       Key: `${id}-${objectKey}`, // path to upload
       Bucket: bucket, // pass your bucket name
-      Expires: 60 * 60 * 48, // 5 minutes // 48hours
+      Expires: 60 * 60 * 1, // 5 minutes // 48hours
       // Body: data,
     };
     s3.getSignedUrl("putObject", objectParams, (error, data) => {
@@ -66,7 +66,7 @@ const getPresignedURL = (req, res) => {
     const objectParams = {
       Key: `${id}-${objectKey}`, // path to upload
       Bucket: bucket, // pass your bucket name
-      Expires: 60 * 60 * 48, // 5 minutes // 48hours
+      Expires: 60 * 60 * 1, // 5 minutes // 48hours
       // Body: data,
     };
     s3.getSignedUrl("getObject", objectParams, (error, data) => {
