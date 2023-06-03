@@ -1,18 +1,13 @@
-const { createURLDataDB } = require("../../utils/getURLDataDb");
-const conn = require("../../DB");
+const {
+  createURLDataDB,
+  getURLDataDB,
+  deleteURLDataById,
+  getURLDataDBById,
+  updateURLDataById,
+  updateURLDataDBById,
+  deleteURLDataDBById,
+} = require("../../utils/getURLDataDb");
 
-const getURLData = async (req, res) => {
-  const query = "SELECT id, objectKey FROM URLDATA";
-
-  conn.query(query, (err, rows) => {
-    if (err) {
-      console.error("Error executing MySQL query: ", err);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-    return res.json(rows);
-  });
-};
 const createURLData = async (req, res) => {
   try {
     const data = await createURLDataDB(req.body);
@@ -22,4 +17,51 @@ const createURLData = async (req, res) => {
   }
 };
 
-module.exports = { getURLData, createURLData };
+const getURLData = async (req, res) => {
+  try {
+    const data = await getURLDataDB();
+    if (!data) return res.status(404).json({ message: "Data not found..!" });
+    return res.status(200).json({ data });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
+
+const getURLDataById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await getURLDataDBById(id);
+    if (!data) return res.status(404).json({ message: "Data not found..!" });
+    return res.status(200).json({ data });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
+
+const updateURLData = async (req, res) => {
+  try {
+    const data = await updateURLDataDBById(req.body, req.params.id);
+    if (!data) return res.status(404).json({ message: "Data not found..!" });
+    return res.status(200).json({ message: "Data updated..!" });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
+
+const deleteURLData = async (req, res) => {
+  try {
+    const data = await deleteURLDataDBById(req.params.id);
+    if (!data) return res.status(404).json({ message: "Data not found..!" });
+    return res.status(200).json({ message: "Data deleted..!!" });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
+
+module.exports = {
+  createURLData,
+  getURLData,
+  getURLDataById,
+  updateURLData,
+  deleteURLData,
+};
